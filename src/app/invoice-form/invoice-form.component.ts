@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { InvoiceRequest } from '../service/InvoiceRequestModel';
+import { ClientServiceService } from '../service/client-service.service';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-invoice-form',
@@ -10,7 +13,7 @@ export class InvoiceFormComponent implements OnInit {
 
   invoiceForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private invoiceService:ClientServiceService) {
     this.invoiceForm = this.fb.group({
       firmName: ['', Validators.required],
       firmAddress: ['', Validators.required],
@@ -58,6 +61,34 @@ export class InvoiceFormComponent implements OnInit {
   // Submit Form
   submitInvoice(): void {
     console.log('Invoice Data:', this.invoiceForm.value);
+    const formValues = this.invoiceForm.value;
+    const invoice: InvoiceRequest = {
+      firmName: formValues.firmName,
+      firmAddress: formValues.firmAddress,
+      invoiceNumber: formValues.invoiceNumber,
+      items: formValues.items.map((item: any) => ({
+        particular: item.particular,
+        qty: item.qty,
+        rate: item.rate
+      }))
+    };
+
+    this.invoiceService.getStringResponse(invoice).subscribe(data=>{
+      this.generatePdf(data.htmlData);
+    },err=>{
+      alert("pdf generation issue")
+    });
+  }
+
+  generatePdf(htmlContent: string) {
+    const printWindow = window.open('', '', 'height=500,width=800');
+    if (printWindow) {
+
+      printWindow.document.write(htmlContent);
+      printWindow.document.close();
+      printWindow.print();
+    }
+
   }
 
   ngOnInit(): void {

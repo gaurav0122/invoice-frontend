@@ -6,6 +6,7 @@
       <label>Invoice/Quotation Number:</label>
       <input type="number" formControlName="invoiceNumber" class="form-control" required />
     </div>
+
     <!-- Firm Details -->
     <div class="form-group">
       <label>Firm Name:</label>
@@ -17,31 +18,26 @@
       <textarea formControlName="firmAddress" class="form-control" required></textarea>
     </div>
 
-    <!-- Dynamic Item Rows -->
-    <h3>Invoice Items</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Particular</th>
-          <th>Quantity</th>
-          <th>Rate</th>
-          <th>Amount</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody formArrayName="items" >
-        <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
-          <td><textarea type="text" formControlName="particular" class="form-control" required ></textarea></td>
-          <td><input type="number" formControlName="qty" class="form-control" required /></td>
-          <td><input type="number" formControlName="rate" class="form-control" required /></td>
-          <td>{{ item.get('qty')?.value * item.get('rate')?.value }}</td>
-          <td>
+    <!-- Invoice Items Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Invoice Items</h3>
+      </div>
+      <div class="card-body">
+        <div formArrayName="items">
+          <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="item-row">
+            <label>Particular:</label>
+            <textarea type="text" formControlName="particular" class="form-control" placeholder="Particular" required></textarea>
+            <label>Quantity:</label>
+            <input type="number" formControlName="qty" class="form-control" placeholder="Quantity" required />
+            <label>Rate:</label>
+            <input type="number" formControlName="rate" class="form-control" placeholder="Rate" required />
+            <p class="amount">Amount: ₹{{ item.get('qty')?.value * item.get('rate')?.value }}</p>
             <button type="button" class="btn btn-danger" (click)="removeItem(i)">Remove</button>
-          </td>
-        </tr>
-
-      </tbody>
-    </table>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <button type="button" class="btn btn-primary" (click)="addItem()">Add Item</button>
 

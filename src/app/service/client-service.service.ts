@@ -13,8 +13,7 @@ export class ClientServiceService {
   constructor(private http: HttpClient) {}
 
   // Method to fetch string response from API
-  getStringResponse(request:InvoiceRequest):Observable<InvoiceResponse> {
-    let responseHtml;
-    return this.http.post<InvoiceResponse>(this.apiUrl,request);
+  getStringResponse(request:InvoiceRequest) {
+    return this.http.post(this.apiUrl,request,{ responseType: 'blob' as 'json' });
   }
 }

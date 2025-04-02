@@ -79,7 +79,7 @@ export class InvoiceFormComponent implements OnInit {
       const a = document.createElement('a');
 
       a.href = url;
-      a.download = 'generated.pdf';
+      a.download = 'invoice.pdf';
       document.body.appendChild(a);
       a.click();
 

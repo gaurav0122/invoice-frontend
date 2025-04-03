@@ -74,19 +74,13 @@ export class InvoiceFormComponent implements OnInit {
     };
 
     this.invoiceService.getStringResponse(invoice).subscribe((data:any)=>{
-      const blob = new Blob([data], { type: 'application/pdf' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-
-      a.href = url;
-      a.download = 'invoice.pdf';
-      document.body.appendChild(a);
-      a.click();
-
-      // Cleanup
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-
+      console.log(data);
+      var printWindow = window.open('', '', 'height=400,width=800');
+      if(printWindow){
+        printWindow.document.write(data?.htmlData);
+        printWindow.document.close();
+        printWindow.print();
+      }
     });
   }
 

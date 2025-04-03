@@ -8,7 +8,7 @@ import { InvoiceRequest } from './InvoiceRequestModel';
   providedIn: 'root'
 })
 export class ClientServiceService {
-  private apiUrl = 'http://localhost:3000/user'; // Replace with your actual API URL
+  private apiUrl = 'https://invoice-backend-liard.vercel.app/user'; // Replace with your actual API URL
 
   constructor(private http: HttpClient) {}
 
